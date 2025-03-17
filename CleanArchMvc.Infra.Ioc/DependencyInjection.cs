@@ -18,12 +18,24 @@ namespace CleanArchMvc.Infra.Ioc
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
             b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
+            #region Repository
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            #endregion
 
+            #region Service
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            #endregion
+
+            #region Mapeamento
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            #endregion
+
+            #region Handlers
+            var myhandlers = AppDomain.CurrentDomain.Load("CleanArchMvc.Application");
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(myhandlers));
+            #endregion
 
             return services;
 
