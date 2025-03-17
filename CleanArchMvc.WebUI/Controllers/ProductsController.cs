@@ -17,5 +17,6 @@ namespace CleanArchMvc.WebUI.Controllers
             var products = await _productService.GetProducts();
             return View(products);
         }
+
     }
 }
